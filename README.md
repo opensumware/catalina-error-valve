@@ -1,27 +1,33 @@
-catalina-error-valve
+Catalina-Error-Valve
 ====================
 
-This is an implementation of a catalina Valve that can be configuered to render global error.
-This valve can be used to override the default catalina default error page.  You can configure
-it to generate error pages regardless of the context that created the error, therefore creating
-a global error page.
+This is a configurable implementation of a catalina Valve that can be used to render global error pages.
+This valve can be used to override the default catalina error page valve using the `errorReportValveClass` 
+attribute of the `<Host/>` element in `server.xml`.  As with the default error report valve class, 
+this valve (ErrorReportingValve) will generate error pages whenever there is a container-wide error generated
+by a request.  This valve, however, let you use a customized HTML page to be displayed for the error. 
 
 
-Unlike other valves that use the <Valve/> tag, this one is configured in the host definition 
-as  <Host errorReportValve="..."/>.  Therefore, it cannot be configured like other valves.  
-Configuration values for this valved are read from catalina.properties.  All properties for this valved
-start with prefix "error.page.".  A third value is added to determine which error page to show depending 
-on the error that was generated.
+###Configuration
+To use this valve, do the followings:
+ * Pull code down and build (use Maven).
+ * Put the generated catalina-error-valve jar file in Tomcat's lib directory.
+ * Edit `server.xml` and add set attribute `errorReportValveClass` for the desired <Host/>.
+   * `<Host ... errorReportValveClass="com.vvivien.oss.ErrorReportingValve">`
+ * Add properties in `catalina.properties` to point to HTML pages.
+ * All properties for the valve start with prefix `"error.page."`.  
+   * `error.page.*` - default page to display when no specific pages are configured
+   * `error.page.XXX` - Use XXX to specify an HTTP response code (i.e error.page.404).
 
-Example:
+####Example:
 
-    error.page.*=./error/errorAll.html    # the default that will be shown when no other pages are configured
-    error.page.404=./error/error404.html  # shown for a 404 
-    error.page.500=./error/error.500.html # shown for a 500
+    error.page.*=./error/errorAll.html    # the default error page
+    error.page.404=./error/error404.html  # error page for a 404 
+    error.page.500=./error/error.500.html # error page for a 500
 
-Each `error.page.` entry points to the path of an HTML page that will be displayed upon an error. 
+Each `error.page.` entry points to the path of an HTML page that will be displayed upon error. 
 The location of the page can be relative (to catalina's working directory) or absolute.  If none of the error pages
-are not found or configured properly, the class will default to an internal simple page (you don't want that).
+are not found or configured properly, the class will default to an internal simple page (you don't want that one).
 
 ### Reference:
 See attribute `"errorReportValveClass"` in page 
