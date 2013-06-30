@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.vvivien.oss</groupId>
+    <artifactId>catalina-error-valve</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>catalina-error-valve</name>
+    <description>An implementation of catalina Valve that can be used to display global error messages.</description>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <tomcat.version>7.0.23</tomcat.version>
+        <junit.version>4.10</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+  
+    <profiles>
+        
+    <!--
+        License profile : 
+            mvn -P license license:check or
+            mvn -P license license:format
+      -->        
+        <profile>
+            <id>license</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <version>1.7.0</version>
+                        <configuration>
+                            <quiet>false</quiet>
+                            <header>src/main/license/apache2-lic.txt</header>
+                            <includes>
+                                <include>src/**</include>
+                                <include>pom.xml</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/.git/**</exclude>
+                                <!-- ignore files produced during a build -->
+                                <exclude>**/target/**</exclude>
+                            </excludes>
+                            <useDefaultExcludes>false</useDefaultExcludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>    
+</project>
