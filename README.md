@@ -1,8 +1,8 @@
 Catalina-Error-Valve
 ====================
 
-This is a configurable implementation of a catalina Valve that can be used to render global error pages.
-This valve can be used to override the default catalina error page valve using the `errorReportValveClass` 
+This is an implementation of the Catalina Valve interface that can be used to render global Tomcat error pages.
+This valve can be used to override the default Catalina error page valve set using the `errorReportValveClass` 
 attribute of the `<Host/>` element in `server.xml`.  As with the default error report valve class, 
 this valve (ErrorReportingValve) will generate error pages whenever there is a container-wide error generated
 by a request.  This valve, however, let you use a customized HTML page to be displayed for the error. 
