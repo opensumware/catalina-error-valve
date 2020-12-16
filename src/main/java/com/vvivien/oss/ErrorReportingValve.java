@@ -9,9 +9,11 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.Contained;
+import org.apache.catalina.Valve;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.catalina.util.RequestUtil;
 import org.apache.catalina.valves.ValveBase;
 
 /**
@@ -41,7 +43,7 @@ import org.apache.catalina.valves.ValveBase;
  * Vladimir Vivien
  *
  */
-public class ErrorReportingValve extends ValveBase{
+public class ErrorReportingValve extends ValveBase implements Contained, Valve{
     private static final String CONTENT_TYPE = "text/html";
     private static final String CONTENT_CHARSET = "utf-8";
     private static final String INFO = ErrorReportingValve.class.getCanonicalName() +"/1.0";
@@ -54,6 +56,9 @@ public class ErrorReportingValve extends ValveBase{
     private Map<String,String> propsMap;
     private Map<String,Map<String,Object>> pageMap;
     
+    public String getInfo() {
+        return INFO;
+    }
 
     public ErrorReportingValve(){
         super(true);
@@ -61,13 +66,7 @@ public class ErrorReportingValve extends ValveBase{
         pageMap  = new HashMap<String,Map<String,Object>>();
         loadProperties();
     }
-            
-    @Override
-    public String getInfo() {
-        return INFO;
-    }
     
-    @Override
     public void invoke(Request req, Response rsp) throws IOException, ServletException {
         
         getNext().invoke(req, rsp);
@@ -134,7 +133,7 @@ public class ErrorReportingValve extends ValveBase{
         int code = rsp.getStatus();
         if (code < 400 || rsp.getContentWritten() > 0 || !rsp.isError()) return OK;
         
-        String message = RequestUtil.filter(rsp.getMessage());
+        String message = rsp.getMessage();
         message = message == null ? "" : message;
         
         // OK if no report for message
@@ -209,7 +208,8 @@ public class ErrorReportingValve extends ValveBase{
             
             StringBuilder pageContent = new StringBuilder();
             try{
-                BufferedReader reader = new BufferedReader(new FileReader(pageFile));
+                @SuppressWarnings("resource")
+				BufferedReader reader = new BufferedReader(new FileReader(pageFile));
                 String line = null;
                 while ((line = reader.readLine()) != null){
                     pageContent.append(line);
