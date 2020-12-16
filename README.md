@@ -31,4 +31,4 @@ are not found or configured properly, the class will default to an internal simp
 
 ### Reference:
 See attribute `"errorReportValveClass"` in page 
-http://tomcat.apache.org/tomcat-7.0-doc/config/host.html
+http://tomcat.apache.org/tomcat-9.0-doc/config/host.html
